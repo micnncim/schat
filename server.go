@@ -16,9 +16,9 @@ import (
 	pb "github.com/micnncim/schat/proto"
 )
 
-type server struct{}
+type Server struct{}
 
-func (s *server) Run(ctx context.Context) error {
+func (s *Server) Run(ctx context.Context) error {
 	log.Println("server: starting")
 
 	srv := grpc.NewServer()
@@ -42,7 +42,7 @@ func (s *server) Run(ctx context.Context) error {
 	}
 }
 
-func (s *server) SendMessage(stream pb.Chat_SendMessageServer) error {
+func (s *Server) SendMessage(stream pb.Chat_SendMessageServer) error {
 	for {
 		req, err := stream.Recv()
 		if err == io.EOF {

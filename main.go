@@ -31,7 +31,7 @@ func main() {
 	defer cancel()
 
 	if serverMode {
-		s := &server{}
+		s := &Server{}
 		if err := s.Run(ctx); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
@@ -39,7 +39,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	c, err := newClient()
+	c, err := NewClient()
 	if err != nil {
 		log.Fatal(err)
 	}

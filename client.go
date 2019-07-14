@@ -16,24 +16,24 @@ import (
 	pb "github.com/micnncim/schat/proto"
 )
 
-type client struct {
+type Client struct {
 	cli  pb.ChatClient
 	conn *grpc.ClientConn
 }
 
-func newClient() (*client, error) {
+func NewClient() (*Client, error) {
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}
-	c := &client{
+	c := &Client{
 		cli:  pb.NewChatClient(conn),
 		conn: conn,
 	}
 	return c, nil
 }
 
-func (c *client) Run(ctx context.Context) error {
+func (c *Client) Run(ctx context.Context) error {
 	log.Println("client: starting")
 
 	stream, err := c.cli.SendMessage(ctx)
@@ -67,7 +67,7 @@ func (c *client) Run(ctx context.Context) error {
 	}
 }
 
-func (c *client) send(ctx context.Context, stream pb.Chat_SendMessageClient, username string) error {
+func (c *Client) send(ctx context.Context, stream pb.Chat_SendMessageClient, username string) error {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
@@ -90,7 +90,7 @@ func (c *client) send(ctx context.Context, stream pb.Chat_SendMessageClient, use
 	}
 }
 
-func (c *client) receive(ctx context.Context, stream pb.Chat_SendMessageClient) error {
+func (c *Client) receive(ctx context.Context, stream pb.Chat_SendMessageClient) error {
 	for {
 		fmt.Fprintf(os.Stderr, ">>> ")
 		resp, err := stream.Recv()
@@ -108,6 +108,6 @@ func (c *client) receive(ctx context.Context, stream pb.Chat_SendMessageClient) 
 	}
 }
 
-func (c *client) Close() error {
+func (c *Client) Close() error {
 	return c.conn.Close()
 }
