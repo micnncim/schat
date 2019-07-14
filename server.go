@@ -38,7 +38,7 @@ func (s *Server) Run(ctx context.Context) error {
 	case err := <-errCh:
 		return err
 	case <-ctx.Done():
-		return errors.New("server: timeout")
+		return errors.New("server: canceled")
 	}
 }
 
@@ -57,7 +57,6 @@ func (s *Server) SendMessage(stream pb.Chat_SendMessageServer) error {
 		if err != nil {
 			return err
 		}
-		println("[debug] ", now.String())
 		msg := fmt.Sprintf("%8s | %s", req.Username, req.Message)
 		err = stream.Send(&pb.SendMessageResponse{
 			Message:   msg,

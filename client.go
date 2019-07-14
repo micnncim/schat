@@ -63,7 +63,7 @@ func (c *Client) Run(ctx context.Context) error {
 	case err := <-errCh:
 		return err
 	case <-ctx.Done():
-		return nil
+		return errors.New("client: canceled")
 	}
 }
 
@@ -73,7 +73,7 @@ func (c *Client) send(ctx context.Context, stream pb.Chat_SendMessageClient, use
 	for {
 		select {
 		case <-ctx.Done():
-			return errors.New("client: done")
+			return errors.New("client: canceled")
 		default:
 			if scanner.Scan() {
 				err := stream.Send(&pb.SendMessageRequest{
