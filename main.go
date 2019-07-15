@@ -20,7 +20,7 @@ var (
 
 func init() {
 	flag.BoolVar(&serverMode, "s", false, "run as a server")
-	flag.StringVar(&host, "h", "localhost:8080", "host of server for client")
+	flag.StringVar(&host, "h", "localhost:8080", "host of server")
 	flag.StringVar(&username, "u", "anonymous", "username of client")
 	flag.Parse()
 }

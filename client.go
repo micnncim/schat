@@ -35,7 +35,7 @@ func NewClient(host, username string) (*Client, error) {
 }
 
 func (c *Client) Run(ctx context.Context) error {
-	log.Println("client: starting")
+	log.Printf("client: starting")
 
 	stream, err := c.cli.SendMessage(ctx)
 	if err != nil {
@@ -43,9 +43,9 @@ func (c *Client) Run(ctx context.Context) error {
 	}
 	defer func() {
 		stream.CloseSend()
-		log.Println("client: disconnected from stream")
+		log.Printf("client: disconnected from stream")
 	}()
-	log.Println("client: connected to stream")
+	log.Printf("client: connected to stream")
 
 	errCh := make(chan error)
 	go func() {
