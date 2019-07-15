@@ -27,7 +27,7 @@ func NewServer(host string) *Server {
 }
 
 func (s *Server) Run(ctx context.Context) error {
-	log.Println("server: starting")
+	log.Printf("server: starting on %s", s.host)
 
 	srv := grpc.NewServer()
 	pb.RegisterChatServer(srv, s)
