@@ -15,7 +15,7 @@ $ schat -s
 ### Run as Client
 
 ```
-$ schat
+$ schat -u micnncim
 2019/07/15 00:35:21 client: starting
 2019/07/15 00:35:21 client: connected to stream
 >>> hello

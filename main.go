@@ -12,15 +12,16 @@ import (
 var (
 	serverMode bool
 	port       string
-	address    string
+	host       string
+	username   string
 
 	defaultLocation = time.FixedZone("Asia/Tokyo", 9*60*60)
 )
 
 func init() {
 	flag.BoolVar(&serverMode, "s", false, "run as a server")
-	flag.StringVar(&port, "port", ":8080", "port for server")
-	flag.StringVar(&address, "address", "localhost:8080", "address of server for client")
+	flag.StringVar(&host, "h", "localhost:8080", "host of server for client")
+	flag.StringVar(&username, "u", "anonymous", "username of client")
 	flag.Parse()
 }
 
@@ -31,7 +32,7 @@ func main() {
 	defer cancel()
 
 	if serverMode {
-		s := &Server{}
+		s := NewServer(host)
 		if err := s.Run(ctx); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
@@ -39,7 +40,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	c, err := NewClient()
+	c, err := NewClient(host, username)
 	if err != nil {
 		log.Fatal(err)
 	}

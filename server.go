@@ -16,7 +16,15 @@ import (
 	pb "github.com/micnncim/schat/proto"
 )
 
-type Server struct{}
+type Server struct {
+	host string
+}
+
+func NewServer(host string) *Server {
+	return &Server{
+		host: host,
+	}
+}
 
 func (s *Server) Run(ctx context.Context) error {
 	log.Println("server: starting")
@@ -24,7 +32,7 @@ func (s *Server) Run(ctx context.Context) error {
 	srv := grpc.NewServer()
 	pb.RegisterChatServer(srv, s)
 
-	lis, err := net.Listen("tcp", port)
+	lis, err := net.Listen("tcp", s.host)
 	if err != nil {
 		return err
 	}

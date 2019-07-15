@@ -8,7 +8,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"os/user"
 
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc"
@@ -17,18 +16,20 @@ import (
 )
 
 type Client struct {
-	cli  pb.ChatClient
-	conn *grpc.ClientConn
+	cli      pb.ChatClient
+	conn     *grpc.ClientConn
+	username string
 }
 
-func NewClient() (*Client, error) {
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+func NewClient(host, username string) (*Client, error) {
+	conn, err := grpc.Dial(host, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}
 	c := &Client{
-		cli:  pb.NewChatClient(conn),
-		conn: conn,
+		cli:      pb.NewChatClient(conn),
+		conn:     conn,
+		username: username,
 	}
 	return c, nil
 }
@@ -46,14 +47,9 @@ func (c *Client) Run(ctx context.Context) error {
 	}()
 	log.Println("client: connected to stream")
 
-	u, err := user.Current()
-	if err != nil {
-		return err
-	}
-
 	errCh := make(chan error)
 	go func() {
-		errCh <- c.send(ctx, stream, u.Username)
+		errCh <- c.send(ctx, stream, c.username)
 	}()
 	go func() {
 		errCh <- c.receive(ctx, stream)
