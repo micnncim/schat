@@ -4,6 +4,16 @@
 
 ## Usage 
 
+```
+$ schat --help
+Usage of schat:
+  -h string
+        host of server (default "localhost:8080")
+  -s    run as a server
+  -u string
+        username of client (default "anonymous")
+```
+
 ### Run as Server
 
 ```
